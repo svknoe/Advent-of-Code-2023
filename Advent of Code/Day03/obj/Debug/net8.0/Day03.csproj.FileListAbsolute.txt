@@ -1,0 +1,15 @@
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\bin\Debug\net8.0\Day03.exe
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\bin\Debug\net8.0\Day03.deps.json
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\bin\Debug\net8.0\Day03.runtimeconfig.json
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\bin\Debug\net8.0\Day03.dll
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\bin\Debug\net8.0\Day03.pdb
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.AssemblyInfoInputs.cache
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.AssemblyInfo.cs
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.csproj.CoreCompileInputs.cache
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.sourcelink.json
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.dll
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\refint\Day03.dll
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.pdb
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\Day03.genruntimeconfig.cache
+C:\Users\svkno\Documents\GitHub\Advent-of-Code-2023\Advent of Code\Day03\obj\Debug\net8.0\ref\Day03.dll
