@@ -14,7 +14,7 @@ namespace Tools
         /// Length of IntervalCollection.
         /// This length is the sum of the lengths of all constituent Intervals.
         /// </summary>
-        public int Length => Intervals.Select(x => x.Length).Sum();
+        public long Length => Intervals.Select(x => x.Length).Sum();
 
         public IntervalCollection() { }
 
@@ -34,7 +34,7 @@ namespace Tools
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public bool Contains(int x)
+        public bool Contains(long x)
         {
             var contains = Intervals.Any(interval => interval.Contains(x));
             return contains;
@@ -45,7 +45,7 @@ namespace Tools
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public Interval? GetIntervalContainingValue(int x)
+        public Interval? GetIntervalContainingValue(long x)
         {
             var intervalContainingValue = Intervals.FirstOrDefault(interval => interval.Contains(x));
             return intervalContainingValue;
@@ -145,7 +145,7 @@ namespace Tools
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public int DistanceTo(int x)
+        public long DistanceTo(long x)
         {
             if (Contains(x)) return 0;
 
@@ -158,7 +158,7 @@ namespace Tools
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
-        public int DistanceTo(Interval interval)
+        public long DistanceTo(Interval interval)
         {
             if (Overlaps(interval)) return 0;
 
@@ -171,7 +171,7 @@ namespace Tools
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int DistanceTo(IntervalCollection other)
+        public long DistanceTo(IntervalCollection other)
         {
             if (Overlaps(other)) return 0;
 
@@ -206,7 +206,7 @@ namespace Tools
                 foreach (var otherInterval in other.Intervals)
                 {
                     var intervalIntersection = interval.GetIntersection(otherInterval);
-                    if (intervalIntersection?.Length > 0) intervalIntersections.Add(intervalIntersection);
+                    if (intervalIntersection?.Length >= 0) intervalIntersections.Add(intervalIntersection);
                 }
             }
 
@@ -273,7 +273,7 @@ namespace Tools
             var nonOverlappingIntervals = new List<Interval>();
 
             var infiniteLoopDetectionCounter = 0;
-            const int infiniteLoopDetectionThreshold = (int)1e4;
+            const long infiniteLoopDetectionThreshold = (int)1e4;
             while (unProcessedIntervals.Count > 0 && infiniteLoopDetectionCounter < infiniteLoopDetectionThreshold)
             {
                 var intervalsMerged = false;

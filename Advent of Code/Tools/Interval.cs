@@ -5,12 +5,12 @@ namespace Tools
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
     public class Interval
     {
-        private int _a;
+        private long _a;
 
         /// <summary>
         /// Value denoting the lower bound of the interval.
         /// </summary>
-        public int A
+        public long A
         {
             get => _a;
             set
@@ -24,12 +24,12 @@ namespace Tools
             }
         }
 
-        private int _b;
+        private long _b;
 
         /// <summary>
         /// Value denoting the upper bound of the interval.
         /// </summary>
-        public int B
+        public long B
         {
             get => _b;
             set
@@ -46,7 +46,7 @@ namespace Tools
         /// <summary>
         /// Length of the interval.
         /// </summary>
-        public int Length => B - A;
+        public long Length => B - A + 1;
 
         public Interval()
         {
@@ -59,7 +59,7 @@ namespace Tools
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public Interval(int a, int b)
+        public Interval(long a, long b)
         {
             Initialize(a, b);
         }
@@ -74,7 +74,7 @@ namespace Tools
             Initialize(point.X, point.Y);
         }
 
-        private void Initialize(int a, int b)
+        private void Initialize(long a, long b)
         {
             if (a < b)
             {
@@ -93,7 +93,7 @@ namespace Tools
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public bool Contains(int x)
+        public bool Contains(long x)
         {
             var contains = A <= x && x <= B;
             return contains;
@@ -128,7 +128,7 @@ namespace Tools
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public int DistanceTo(int x)
+        public long DistanceTo(long x)
         {
             if (Contains(x)) return 0;
 
@@ -141,7 +141,7 @@ namespace Tools
         /// </summary>
         /// <param name="otherInterval"></param>
         /// <returns></returns>
-        public int DistanceTo(Interval otherInterval)
+        public long DistanceTo(Interval otherInterval)
         {
             if (Overlaps(otherInterval)) return 0;
 
@@ -194,7 +194,7 @@ namespace Tools
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        public Interval ExtendTo(int x)
+        public Interval ExtendTo(long x)
         {
             var extendedInterval = new Interval(Math.Min(A, x), Math.Max(B, x));
             return extendedInterval;
@@ -229,8 +229,8 @@ namespace Tools
         {
             var complementIntervals = new List<Interval>();
 
-            if (int.MinValue < A) complementIntervals.Add(new(int.MinValue, A));
-            if (B < int.MaxValue) complementIntervals.Add(new(B, int.MaxValue));
+            if (long.MinValue < A) complementIntervals.Add(new(long.MinValue, A - 1));
+            if (B < long.MaxValue) complementIntervals.Add(new(B + 1, long.MaxValue));
             var complement = new IntervalCollection(complementIntervals);
             return complement;
         }
