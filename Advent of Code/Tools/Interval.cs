@@ -1,238 +1,236 @@
 ﻿using System.Drawing;
 
-namespace Tools
-{
+namespace Tools;
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
-    public class Interval
+public class Interval
+{
+    private long _a;
+
+    /// <summary>
+    /// Value denoting the lower bound of the interval.
+    /// </summary>
+    public long A
     {
-        private long _a;
-
-        /// <summary>
-        /// Value denoting the lower bound of the interval.
-        /// </summary>
-        public long A
+        get => _a;
+        set
         {
-            get => _a;
-            set
-            {
-                if (B == default || value <= B) _a = value;
-                else
-                {
-                    _a = B;
-                    _b = value;
-                }
-            }
-        }
-
-        private long _b;
-
-        /// <summary>
-        /// Value denoting the upper bound of the interval.
-        /// </summary>
-        public long B
-        {
-            get => _b;
-            set
-            {
-                if (value >= A) _b = value;
-                else
-                {
-                    _b = A;
-                    _a = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Length of the interval.
-        /// </summary>
-        public long Length => B - A + 1;
-
-        public Interval()
-        {
-            Initialize(0, 0);
-        }
-
-        /// <summary>
-        /// An interval from a to b.
-        /// Interval is reversed if a > b.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        public Interval(long a, long b)
-        {
-            Initialize(a, b);
-        }
-
-        /// <summary>
-        /// An interval from point.X to point.Y.
-        /// Interval is reversed if point.X > point.Y.
-        /// </summary>
-        /// <param name="point"></param>
-        public Interval(Point point)
-        {
-            Initialize(point.X, point.Y);
-        }
-
-        private void Initialize(long a, long b)
-        {
-            if (a < b)
-            {
-                _a = a;
-                _b = b;
-            }
+            if (B == default || value <= B) _a = value;
             else
             {
-                _a = b;
-                _b = a;
+                _a = B;
+                _b = value;
             }
         }
+    }
 
-        /// <summary>
-        /// Checks whether this Interval contains x.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public bool Contains(long x)
+    private long _b;
+
+    /// <summary>
+    /// Value denoting the upper bound of the interval.
+    /// </summary>
+    public long B
+    {
+        get => _b;
+        set
         {
-            var contains = A <= x && x <= B;
-            return contains;
-        }
-
-        /// <summary>
-        /// Checks whether this Interval contains other interval.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Contains(Interval other)
-        {
-            return Contains(other.A) && Contains(other.B);
-        }
-
-        /// <summary>
-        /// Checks whether this Interval overlaps another.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Overlaps(Interval other)
-        {
-            if (Contains(other.A)) return true;
-            if (Contains(other.B)) return true;
-            if (other.Contains(A)) return true;
-            if (other.Contains(B)) return true;
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the distance from this interval to the given value.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public long DistanceTo(long x)
-        {
-            if (Contains(x)) return 0;
-
-            var distance = Math.Min(Math.Abs(A - x), Math.Abs(A - x));
-            return distance;
-        }
-
-        /// <summary>
-        /// Returns the distance from this interval to the given Interval.
-        /// </summary>
-        /// <param name="otherInterval"></param>
-        /// <returns></returns>
-        public long DistanceTo(Interval otherInterval)
-        {
-            if (Overlaps(otherInterval)) return 0;
-
-            var distance = Math.Min(DistanceTo(otherInterval.A), DistanceTo(otherInterval.B));
-            return distance;
-        }
-
-        /// <summary>
-        /// Returns the union of this Interval and another.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <param name="requireOverlap">If this is false then the Interval spanning both Intervals is returned.</param>
-        /// <returns></returns>
-        public IntervalCollection? GetUnion(Interval other, bool requireOverlap = false)
-        {
-            if (!Overlaps(other))
+            if (value >= A) _b = value;
+            else
             {
-                return (requireOverlap ? null : new IntervalCollection(new() { this, other }));
+                _b = A;
+                _a = value;
             }
-
-            var interval = new Interval(Math.Min(A, other.A), Math.Max(B, other.B));
-            var union = new IntervalCollection(new() { interval });
-            return union;
         }
+    }
 
-        /// <summary>
-        /// Returns the intersection of this Interval and another.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public Interval? GetIntersection(Interval other)
+    /// <summary>
+    /// Length of the interval.
+    /// </summary>
+    public long Length => B - A + 1;
+
+    public Interval()
+    {
+        Initialize(0, 0);
+    }
+
+    /// <summary>
+    /// An interval from a to b.
+    /// Interval is reversed if a > b.
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    public Interval(long a, long b)
+    {
+        Initialize(a, b);
+    }
+
+    /// <summary>
+    /// An interval from point.X to point.Y.
+    /// Interval is reversed if point.X > point.Y.
+    /// </summary>
+    /// <param name="point"></param>
+    public Interval(Point point)
+    {
+        Initialize(point.X, point.Y);
+    }
+
+    private void Initialize(long a, long b)
+    {
+        if (a < b)
         {
-            if (!Overlaps(other)) return null;
-            var maxA = Math.Max(A, other.A);
-            var minB = Math.Min(B, other.B);
-            var intersection = new Interval(maxA, minB);
-            var intersectionOrNull = intersection.A <= intersection.B ? intersection : null;
-            return intersectionOrNull;
+            _a = a;
+            _b = b;
         }
-
-        public override bool Equals(object otherObject)
+        else
         {
-            if (otherObject is not Interval other) return false;
-            var areEqual = A == other.A && B == other.B;
-            return areEqual;
+            _a = b;
+            _b = a;
         }
+    }
 
-        /// <summary>
-        /// Returns the Interval that spans both x and this Interval.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public Interval ExtendTo(long x)
+    /// <summary>
+    /// Checks whether this Interval contains x.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <returns></returns>
+    public bool Contains(long x)
+    {
+        var contains = A <= x && x <= B;
+        return contains;
+    }
+
+    /// <summary>
+    /// Checks whether this Interval contains other interval.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public bool Contains(Interval other)
+    {
+        return Contains(other.A) && Contains(other.B);
+    }
+
+    /// <summary>
+    /// Checks whether this Interval overlaps another.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public bool Overlaps(Interval other)
+    {
+        if (Contains(other.A)) return true;
+        if (Contains(other.B)) return true;
+        if (other.Contains(A)) return true;
+        if (other.Contains(B)) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Returns the distance from this interval to the given value.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <returns></returns>
+    public long DistanceTo(long x)
+    {
+        if (Contains(x)) return 0;
+
+        var distance = Math.Min(Math.Abs(A - x), Math.Abs(A - x));
+        return distance;
+    }
+
+    /// <summary>
+    /// Returns the distance from this interval to the given Interval.
+    /// </summary>
+    /// <param name="otherInterval"></param>
+    /// <returns></returns>
+    public long DistanceTo(Interval otherInterval)
+    {
+        if (Overlaps(otherInterval)) return 0;
+
+        var distance = Math.Min(DistanceTo(otherInterval.A), DistanceTo(otherInterval.B));
+        return distance;
+    }
+
+    /// <summary>
+    /// Returns the union of this Interval and another.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <param name="requireOverlap">If this is false then the Interval spanning both Intervals is returned.</param>
+    /// <returns></returns>
+    public IntervalCollection? GetUnion(Interval other, bool requireOverlap = false)
+    {
+        if (!Overlaps(other))
         {
-            var extendedInterval = new Interval(Math.Min(A, x), Math.Max(B, x));
-            return extendedInterval;
+            return (requireOverlap ? null : new IntervalCollection(new() { this, other }));
         }
 
-        /// <summary>
-        /// Returns a copy of this Interval.
-        /// </summary>
-        /// <returns></returns>
-        public Interval Clone()
-        {
-            return new(A, B);
-        }
+        var interval = new Interval(Math.Min(A, other.A), Math.Max(B, other.B));
+        var union = new IntervalCollection(new() { interval });
+        return union;
+    }
 
-        /// <summary>
-        /// Returns an IntervalCollection whose intervals contain exactly those values that are contained in this Interval, but no tin otherInterval.
-        /// </summary>
-        /// <param name="intervalToSubtract"></param>
-        /// <returns></returns>
-        public IntervalCollection GetSubtract(Interval intervalToSubtract)
-        {
-            var intervalCollection = new IntervalCollection(new() { this });
-            intervalCollection.Subtract(intervalToSubtract);
-            return intervalCollection;
-        }
+    /// <summary>
+    /// Returns the intersection of this Interval and another.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public Interval? GetIntersection(Interval other)
+    {
+        if (!Overlaps(other)) return null;
+        var maxA = Math.Max(A, other.A);
+        var minB = Math.Min(B, other.B);
+        var intersection = new Interval(maxA, minB);
+        var intersectionOrNull = intersection.A <= intersection.B ? intersection : null;
+        return intersectionOrNull;
+    }
 
-        /// <summary>
-        /// Returns the an IntervalCollection containing exactly those values that this interval does not contain.
-        /// </summary>
-        /// <returns></returns>
-        public IntervalCollection GetComplement()
-        {
-            var complementIntervals = new List<Interval>();
+    public override bool Equals(object otherObject)
+    {
+        if (otherObject is not Interval other) return false;
+        var areEqual = A == other.A && B == other.B;
+        return areEqual;
+    }
 
-            if (long.MinValue < A) complementIntervals.Add(new(long.MinValue, A - 1));
-            if (B < long.MaxValue) complementIntervals.Add(new(B + 1, long.MaxValue));
-            var complement = new IntervalCollection(complementIntervals);
-            return complement;
-        }
+    /// <summary>
+    /// Returns the Interval that spans both x and this Interval.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <returns></returns>
+    public Interval ExtendTo(long x)
+    {
+        var extendedInterval = new Interval(Math.Min(A, x), Math.Max(B, x));
+        return extendedInterval;
+    }
+
+    /// <summary>
+    /// Returns a copy of this Interval.
+    /// </summary>
+    /// <returns></returns>
+    public Interval Clone()
+    {
+        return new(A, B);
+    }
+
+    /// <summary>
+    /// Returns an IntervalCollection whose intervals contain exactly those values that are contained in this Interval, but no tin otherInterval.
+    /// </summary>
+    /// <param name="intervalToSubtract"></param>
+    /// <returns></returns>
+    public IntervalCollection GetSubtract(Interval intervalToSubtract)
+    {
+        var intervalCollection = new IntervalCollection(new() { this });
+        intervalCollection.Subtract(intervalToSubtract);
+        return intervalCollection;
+    }
+
+    /// <summary>
+    /// Returns the an IntervalCollection containing exactly those values that this interval does not contain.
+    /// </summary>
+    /// <returns></returns>
+    public IntervalCollection GetComplement()
+    {
+        var complementIntervals = new List<Interval>();
+
+        if (long.MinValue < A) complementIntervals.Add(new(long.MinValue, A - 1));
+        if (B < long.MaxValue) complementIntervals.Add(new(B + 1, long.MaxValue));
+        var complement = new IntervalCollection(complementIntervals);
+        return complement;
     }
 }
