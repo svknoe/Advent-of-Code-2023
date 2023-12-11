@@ -25,3 +25,26 @@ public struct Matrix<T>(List<List<T>> rows)
         throw new Exception();
     }
 }
+
+public static class MatrixExtensions
+{
+    public static Matrix<T> GetTransposed<T>(this Matrix<T> matrix)
+    {
+        var transposed = new Matrix<T>(new());
+
+        for (var index = 0; index < matrix.Rows[0].Count; index++)
+        {
+            transposed.Rows.Add(matrix.Rows.Select(x => default(T)).ToList() as List<T>);
+        }
+
+        for (var i = 0; i < matrix.Rows.Count; i++)
+        {
+            for (var j = 0; j < matrix.Rows[0].Count; j++)
+            {
+                transposed.Rows[j][i] = matrix.Rows[i][j];
+            }
+        }
+
+        return transposed;
+    }
+}
